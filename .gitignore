@@ -11,3 +11,4 @@ sources/
 AGENTS.md
 .wrangler/
 .open-next/
+*.tsbuildinfo
