@@ -1,0 +1,109 @@
+generator client { provider = "prisma-client-js" }
+datasource db { provider = "postgresql"; url = env("DATABASE_URL") }
+
+model User {
+  id String @id @default(cuid())
+  name String?
+  email String? @unique
+  image String?
+  accounts Account[]
+  sessions Session[]
+  matches Match[]
+  champions ChampionPool[]
+  goals StageGoal[]
+  tasks TrainingTask[]
+  createdAt DateTime @default(now())
+}
+model Account {
+  id String @id @default(cuid())
+  userId String
+  type String
+  provider String
+  providerAccountId String
+  refresh_token String? @db.Text
+  access_token String? @db.Text
+  expires_at Int?
+  token_type String?
+  scope String?
+  id_token String? @db.Text
+  session_state String?
+  user User @relation(fields:[userId],references:[id],onDelete:Cascade)
+  @@unique([provider,providerAccountId])
+}
+model Session {
+  sessionToken String @unique
+  userId String
+  expires DateTime
+  user User @relation(fields:[userId],references:[id],onDelete:Cascade)
+}
+model VerificationToken {
+  identifier String
+  token String @unique
+  expires DateTime
+  @@unique([identifier,token])
+}
+model Match {
+  id String @id @default(cuid())
+  userId String
+  user User @relation(fields:[userId],references:[id],onDelete:Cascade)
+  champion String
+  opponent String?
+  role Role
+  result MatchResult
+  kills Int @default(0)
+  deaths Int @default(0)
+  assists Int @default(0)
+  duration Int?
+  keyEvents Json?
+  scores AbilityScore[]
+  generatedGoal String?
+  playedAt DateTime @default(now())
+  createdAt DateTime @default(now())
+  @@index([userId,playedAt])
+}
+model AbilityScore {
+  id String @id @default(cuid())
+  matchId String
+  match Match @relation(fields:[matchId],references:[id],onDelete:Cascade)
+  dimension AbilityDimension
+  value Int
+  @@unique([matchId,dimension])
+}
+model TrainingTask {
+  id String @id @default(cuid())
+  userId String
+  user User @relation(fields:[userId],references:[id],onDelete:Cascade)
+  title String
+  dimension AbilityDimension
+  successRule String
+  targetCount Int @default(3)
+  completedCount Int @default(0)
+  status TaskStatus @default(ACTIVE)
+  createdAt DateTime @default(now())
+}
+model ChampionPool {
+  id String @id @default(cuid())
+  userId String
+  user User @relation(fields:[userId],references:[id],onDelete:Cascade)
+  champion String
+  role Role
+  tier PoolTier
+  notes String?
+  matchupNotes Json?
+  @@unique([userId,champion,role])
+}
+model StageGoal {
+  id String @id @default(cuid())
+  userId String
+  user User @relation(fields:[userId],references:[id],onDelete:Cascade)
+  title String
+  targetScore Int?
+  dueAt DateTime?
+  completedAt DateTime?
+  createdAt DateTime @default(now())
+}
+enum Role { TOP JUNGLE MID ADC SUPPORT }
+enum MatchResult { WIN LOSS }
+enum PoolTier { MAIN BACKUP LEARNING }
+enum TaskStatus { ACTIVE COMPLETED ARCHIVED }
+enum AbilityDimension { LANING WAVE MAP RESOURCE TEAMFIGHT MASTERY ITEMS COMPOSITION CONSISTENCY }

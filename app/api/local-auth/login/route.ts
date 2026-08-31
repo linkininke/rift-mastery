@@ -1,0 +1,4 @@
+import {NextResponse} from 'next/server';
+import {scryptSync,timingSafeEqual} from 'node:crypto';
+import {COOKIE_NAME,createSession} from '@/lib/local-auth';
+export async function POST(request:Request){const {email,password}=await request.json();const expectedEmail=process.env.AUTH_LOCAL_EMAIL||'';const salt=process.env.AUTH_LOCAL_PASSWORD_SALT||'';const expected=process.env.AUTH_LOCAL_PASSWORD_HASH||'';let valid=false;try{const actual=scryptSync(String(password),salt,64);const expectedBuffer=Buffer.from(expected,'hex');valid=String(email).trim().toLowerCase()===expectedEmail.toLowerCase()&&actual.length===expectedBuffer.length&&timingSafeEqual(actual,expectedBuffer)}catch{}if(!valid)return NextResponse.json({error:'账号或密码错误'},{status:401});const response=NextResponse.json({ok:true});response.cookies.set(COOKIE_NAME,createSession(expectedEmail),{httpOnly:true,sameSite:'lax',secure:process.env.NODE_ENV==='production',path:'/',maxAge:60*60*24*30});return response}

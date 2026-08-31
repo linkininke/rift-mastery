@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root { color-scheme: dark; }
+* { border-color: rgba(255,255,255,.08); }
+body { margin:0; background:#090b10; color:#f4f3ee; font-family:Arial,"PingFang SC","Microsoft YaHei",sans-serif; }
+body:before { content:""; position:fixed; inset:0; pointer-events:none; background:radial-gradient(circle at 72% 0%,rgba(34,109,105,.17),transparent 34%),radial-gradient(circle at 0% 80%,rgba(181,130,41,.08),transparent 28%); }
+.card { @apply rounded-2xl border border-white/10 bg-panel/80 shadow-glow backdrop-blur; }
+.eyebrow { @apply text-[11px] font-bold uppercase tracking-[.18em] text-mint; }
+.muted { @apply text-sm text-white/45; }
+.button { @apply inline-flex items-center justify-center gap-2 rounded-xl bg-mint px-4 py-2.5 text-sm font-bold text-ink transition hover:bg-[#72e6c6]; }
+.button-secondary { @apply inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm font-semibold text-white/80 hover:bg-white/10; }
+input,select,textarea { @apply rounded-xl border border-white/10 bg-white/[.04] px-3 py-2.5 text-sm text-white outline-none placeholder:text-white/25 focus:border-mint/60; }

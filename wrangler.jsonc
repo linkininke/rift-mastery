@@ -1,0 +1,10 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "rift-mastery",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2026-08-31",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {"directory": ".open-next/assets", "binding": "ASSETS"},
+  "kv_namespaces": [{"binding": "MATCHES_KV", "id": "35bd921655654d99bf98606f31e77093"}],
+  "observability": {"enabled": true}
+}
