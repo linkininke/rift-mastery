@@ -55,3 +55,5 @@ MVP 当前用前端示例数据展示体验，分析接口已位于 `/api/analyz
 本地开发时也可以在另一个终端执行 `npm run sync:lcu`。
 
 同步助手只读取本机 LCU 的当前召唤师与最近 20 局数据。客户端临时认证令牌不会写入磁盘，也不会发送给 Web 服务。助手只接受配置过的站点来源，并通过 `RIFT_MASTERY_URL` 与 `RIFT_SYNC_TOKEN` 安全地把战绩上传到站点。
+
+如果访问 Cloudflare 需要本机代理，可在 `.env.local` 设置 `RIFT_PROXY_URL`；示例使用 `http://127.0.0.1:7892`。
